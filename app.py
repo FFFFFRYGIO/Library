@@ -37,10 +37,15 @@ def add_books():
             if request.form[key]:
                 book_params[key] = request.form[key]
         count_errors = add(book_params)  # to flash
-        # print('------------', count_errors, '------------')
-        flash('Adding succesful with ' + str(count_errors[2]) + ' successes')
-        flash('Errors with lack of ISBN number: ' + str(count_errors[0]))
-        flash('Errors with duplicated books: ' + str(count_errors[1]))
+        if count_errors[0] != -1:
+            if count_errors[2]:
+                flash('Adding succesful with ' + str(count_errors[2]) + ' successes')
+            else:
+                flash('No books added')
+            if count_errors[0]:
+                flash('Errors with lack of ISBN number: ' + str(count_errors[0]))
+            if count_errors[1]:
+                flash('Errors with duplicated books: ' + str(count_errors[1]))
         return redirect(url_for("books_list"))
     else:
         return render_template("add_books.html", key_words=key_words)
@@ -56,8 +61,8 @@ def edit_book():
         for attr in book_dict:
             if book_dict[attr] != request.form[attr]:
                 book_config[attr] = request.form[attr]
-        edit(book_isbn, book_config)
-        flash('Successfully modified book with ISBN number ' + book_isbn)
+        if edit(book_isbn, book_config):
+            flash('Successfully modified book with ISBN number ' + book_isbn)
         return redirect(url_for("books_list"))
     else:
         book_isbn = request.args['book_isbn']

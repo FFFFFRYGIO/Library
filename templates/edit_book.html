@@ -11,7 +11,13 @@
                 {% for key in book %}
                     <tr>
                      <td><label for={{ key }}>{{ key }}</label></td>
-                     <td><input type="text" id={{ key }} name={{ key }} value="{{ book[key] }}"><br></td>
+                    <td>
+                        {% if key == 'pageCount' %}
+                        <input type="number" id={{ key }} name={{ key }} value="{{ book[key] }}"><br>
+                        {% else %}
+                        <input type="text" id={{ key }} name={{ key }} value="{{ book[key] }}"><br>
+                        {% endif %}
+                    </td>
                     </tr>
                 {% endfor %}
            <tr>

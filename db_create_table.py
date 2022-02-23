@@ -13,7 +13,7 @@ class Book(Base):
     pageCount = Column(Integer, nullable=True)
     thumbnail = Column(String(200), nullable=False)
     language = Column(String(10), nullable=False)
-    UniqueConstraint(title, authors, publishedDate, ISBN, pageCount, thumbnail, language)
+    UniqueConstraint(title, authors)
 
 
 Base.metadata.create_all(db)
