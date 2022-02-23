@@ -9,7 +9,7 @@ class Book(Base):
     __tablename__ = 'book'
     ISBN = Column(String(50), primary_key=True)
     title = Column(String(270), nullable=False)
-    authors = Column(String(100), nullable=False)
+    authors = Column(String(110), nullable=False)
     publishedDate = Column(String(10), nullable=True)
     pageCount = Column(Integer, nullable=True)
     thumbnail = Column(String(200), nullable=False)

@@ -136,11 +136,11 @@ def edit_book(book_target_isbn, book_config):
             session.commit()
 
     if 'publishedDate' in book_config:
-        if len(book_config['publishedDate']) > 50:
+        if len(book_config['publishedDate']) > 10:
             wrong_inputs.append('Published date too long')
         else:
             if len(book_config['publishedDate']) == 0:
-                book_config['publishedDate'] = '<no publishedDate>'
+                book_config['publishedDate'] = None
             stmt = update(Book).where(Book.ISBN == book_target_isbn
                                       ).values(publishedDate=book_config['publishedDate']
                                                ).execution_options(synchronize_session="fetch")

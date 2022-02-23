@@ -9,7 +9,7 @@ from login_data_manage import init_login_info, get_admin as admin_settings
 
 def db_create():
     if not init_login_info():
-        print("Error with login inicjalization")
+        print("Error with login initialization")
         quit()
     admin_login_data = admin_settings()
     u = admin_login_data['user']

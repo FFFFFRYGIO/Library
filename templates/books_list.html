@@ -20,13 +20,25 @@
                     <th scope="row">{{ book['ISBN'] }}</th>
                     <td>{{ book['title'] }}</td>
                     <td>{{ book['authors'] }}</td>
-                    <td>{{ book['publishedDate'] }}</td>
-                    <td>{{ book['pageCount'] }}</td>
                     <td>
-                        {% if book['thumbnail'] != '<no thumbnail>' %}
-                            {{ book['thumbnail'] }}<br>
+                        {% if book['publishedDate'] %}
+                        {{ book['publishedDate'] }}
+                        {% else %}
+                        empty
                         {% endif %}
-                        <img src="{{ book['thumbnail'] }}" alt="<no thumbnail>">
+                    </td>
+                    <td>
+                        {% if book['pageCount'] %}
+                        {{ book['pageCount'] }}
+                        {% else %}
+                        empty
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ book['thumbnail'] }}<br>
+                        {% if book['thumbnail'] != '<no thumbnail>' %}
+                            <img src="{{ book['thumbnail'] }}" alt="<wrong thumbnail url>">
+                        {% endif %}
                     </td>
                     <td>{{ book['language'] }}</td>
                     <td>
