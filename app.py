@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from manage_books import get_books, add_books as add, edit_book as edit, get_book_by_isbn
 
 app = Flask(__name__)
+app.secret_key = '12345'
 
 
 @app.route('/')
@@ -36,7 +37,10 @@ def add_books():
             if request.form[key]:
                 book_params[key] = request.form[key]
         count_errors = add(book_params)  # to flash
-        print('------------', count_errors, '------------')
+        # print('------------', count_errors, '------------')
+        flash('Adding succesful with ' + str(count_errors[2]) + ' successes')
+        flash('Errors with lack of ISBN number: ' + str(count_errors[0]))
+        flash('Errors with duplicated books: ' + str(count_errors[1]))
         return redirect(url_for("books_list"))
     else:
         return render_template("add_books.html", key_words=key_words)
@@ -53,6 +57,7 @@ def edit_book():
             if book_dict[attr] != request.form[attr]:
                 book_config[attr] = request.form[attr]
         edit(book_isbn, book_config)
+        flash('Successfully modified book with ISBN number ' + book_isbn)
         return redirect(url_for("books_list"))
     else:
         book_isbn = request.args['book_isbn']
