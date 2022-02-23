@@ -2,4 +2,20 @@
 {% block title %}Add books{% endblock %}
 {% block content %}
 <h1>This is a page where you can add some books.</h1>
+    <form action="#" method="post">
+    <table class="table">
+        <tbody>
+                {% for key, des in key_words.items() %}
+                    <tr>
+                     <td><label for={{ key }}>{{ key }}</label></td>
+                     <td><input type="text" id={{ key }} name={{ key }}><br></td>
+                     <td>{{ des }}</td>
+                    </tr>
+                {% endfor %}
+           <tr>
+               <td><input type="submit" id="submit" value="submit"><br></td>
+           </tr>
+        </tbody>
+    </table>
+    </form>
 {% endblock %}

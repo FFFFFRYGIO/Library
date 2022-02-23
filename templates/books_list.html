@@ -1,5 +1,40 @@
 {% extends "base.html" %}
 {% block title %}List of books{% endblock %}
 {% block content %}
+
 <h1>Here you can see information about all books</h1>
+    <div class="container-fluid">
+    {% if books %}
+        <table class="table">
+            <thead>
+            <tr>
+                {% for attr in books[0].keys() %}
+                    <th scope="col">{{ attr }}</th>
+                {% endfor %}
+                <th>Edit</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for book in books %}
+                    <tr>
+                    <th scope="row">{{ book['ISBN'] }}</th>
+                    <td>{{ book['title'] }}</td>
+                    <td>{{ book['authors'] }}</td>
+                    <td>{{ book['publishedDate'] }}</td>
+                    <td>{{ book['pageCount'] }}</td>
+                    <td>{{ book['thumbnail'] }}</td>
+                    <td>{{ book['language'] }}</td>
+                    <td>
+                        <form action="#" method="post">
+                            <button type="submit" value={{ book['ISBN'] }} name="ISBN">edit</button><br>
+                        </form>
+                    </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>(no books so far)</p>
+    {% endif %}
+    </div>
 {% endblock %}
