@@ -1,10 +1,10 @@
-from db_connect import session
-from db_create_table import Book
-from sqlalchemy import update
-from api_request import get_api_request
-from db_create_table import book_attributes
 from flask import flash
-import datetime as dt
+from sqlalchemy import update
+
+from api_request import get_api_request
+from db_connect import session
+from db_create_tables import Book
+from db_create_tables import book_attributes
 
 
 def add_books(book_params):
@@ -52,16 +52,7 @@ def add_books(book_params):
             curr_book.authors = '<no authors>'
 
         try:
-            getdate = vol.get('publishedDate', None)
-            if len(getdate) == 10:
-                pdate = dt.datetime.strptime(getdate, '%Y-%m-%d')
-            elif len(getdate) == 7:
-                pdate = dt.datetime.strptime(getdate, '%Y-%m')
-            elif len(getdate) == 4:
-                pdate = dt.datetime.strptime(getdate, '%Y')
-            print(getdate, '\t\t', pdate)
-            curr_book.publishedDate = pdate
-            curr_book.publishedDate = None
+            curr_book.publishedDate = vol.get('publishedDate', None)
         except TypeError:
             curr_book.publishedDate = None
 

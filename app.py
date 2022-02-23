@@ -1,12 +1,17 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from datetime import timedelta
+
+from flask import Flask, render_template, request, redirect, url_for, flash, session
+
 from manage_books import get_books, add_books as add, edit_book as edit, get_book_by_isbn
 
 app = Flask(__name__)
 app.secret_key = '12345'
+app.permanent_session_lifetime = timedelta(hours=1)
 
 
-@app.route('/')
+@app.route('/', methods=["POST", "GET"])
 def home():
+    session.permanent = True
     return render_template("index.html")
 
 

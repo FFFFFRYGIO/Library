@@ -1,9 +1,10 @@
-from sqlalchemy_utils import database_exists, create_database
-from login_data_manage import init_login_info, get_admin as admin_settings
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy import create_engine
 import logging
+
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy_utils import database_exists, create_database
+
+from login_data_manage import init_login_info, get_admin as admin_settings
 
 
 def db_create():
@@ -35,7 +36,6 @@ def get_database():
     except IOError:
         log.exception("Failed connection")
         return None, 'fail'
-
     return engine
 
 
@@ -63,13 +63,5 @@ def get_engine(user, passwd, host, port, db):
     return engine
 
 
-def get_session():
-    # creates user session
-    engine = get_engine_from_settings()
-    session = sessionmaker(bind=engine)()
-    return session
-
-
 db = get_database()
-session = get_session()
 Base = declarative_base()
