@@ -4,6 +4,7 @@ from sqlalchemy import update
 from api_request import get_api_request
 from db_create_table import book_attributes
 from flask import flash
+import datetime as dt
 
 
 def add_books(book_params):
@@ -23,7 +24,6 @@ def add_books(book_params):
 
         try:
             isbn_pocket = vol.get('industryIdentifiers')
-            print(isbn_pocket)
             for isbn_elem in isbn_pocket:
                 if isbn_elem.get('type') == 'ISBN_13':
                     curr_book.ISBN = isbn_elem.get('identifier')
@@ -52,9 +52,18 @@ def add_books(book_params):
             curr_book.authors = '<no authors>'
 
         try:
-            curr_book.publishedDate = vol.get('publishedDate', '<no publishedDate>')
+            getdate = vol.get('publishedDate', None)
+            if len(getdate) == 10:
+                pdate = dt.datetime.strptime(getdate, '%Y-%m-%d')
+            elif len(getdate) == 7:
+                pdate = dt.datetime.strptime(getdate, '%Y-%m')
+            elif len(getdate) == 4:
+                pdate = dt.datetime.strptime(getdate, '%Y')
+            print(getdate, '\t\t', pdate)
+            curr_book.publishedDate = pdate
+            curr_book.publishedDate = None
         except TypeError:
-            curr_book.publishedDate = '<no publishedDate>'
+            curr_book.publishedDate = None
 
         try:
             curr_book.pageCount = vol.get('pageCount', None)

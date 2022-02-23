@@ -22,7 +22,12 @@
                     <td>{{ book['authors'] }}</td>
                     <td>{{ book['publishedDate'] }}</td>
                     <td>{{ book['pageCount'] }}</td>
-                    <td>{{ book['thumbnail'] }}</td>
+                    <td>
+                        {% if book['thumbnail'] != '<no thumbnail>' %}
+                            {{ book['thumbnail'] }}<br>
+                        {% endif %}
+                        <img src="{{ book['thumbnail'] }}" alt="<no thumbnail>">
+                    </td>
                     <td>{{ book['language'] }}</td>
                     <td>
                         <form action="#" method="post">
