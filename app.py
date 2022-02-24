@@ -101,7 +101,6 @@ def edit_book():
         else:
             book_isbn = request.args['book_isbn']
             book_dict = get_book_by_isbn(book_isbn)
-            print('\n\n', book_dict, '\n\n')
             book_dict.pop('ISBN')
             return render_template("edit_book.html", book_isbn=book_isbn, book=book_dict, user=session['user'])
     else:
@@ -110,4 +109,4 @@ def edit_book():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
