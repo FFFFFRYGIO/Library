@@ -4,12 +4,12 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy_utils import database_exists, create_database
 
-from login_data_manage import init_login_info, get_admin as admin_settings
+from db_login.login_data_manage import init_login_info, get_admin as admin_settings
 
 
 def db_create():
     if not init_login_info():
-        print("Error with login initialization")
+        # print("Error with login initialization")
         quit()
     admin_login_data = admin_settings()
     u = admin_login_data['user']
@@ -19,12 +19,11 @@ def db_create():
     db = admin_login_data['db']
     url = f"postgresql://{u}:{pd}@{h}:{pt}/{db}"
     if database_exists(url):
-        print("Database already exist!")
+        # print("Database already exist!")
         quit()
     else:
         create_database(url)
-
-    print('Database created')
+    # print('Database created')
 
 
 def get_database():

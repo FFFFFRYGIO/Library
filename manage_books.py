@@ -28,18 +28,18 @@ def add_books(book_params):
                 if isbn_elem.get('type') == 'ISBN_13':
                     curr_book.ISBN = isbn_elem.get('identifier')
             if curr_book.ISBN is None:
-                print('no ISBN code!')
+                # print('no ISBN code!')
                 count_errors += 1
                 continue
         except TypeError:
-            print('no ISBN code!')
+            # print('no ISBN code!')
             count_errors += 1
             continue
 
         try:
             curr_book.title = vol.get('title', '<no title>')
         except TypeError:
-            print('no ISBN code!')
+            # print('no ISBN code!')
             count_errors += 1
             continue
 
@@ -73,14 +73,13 @@ def add_books(book_params):
 
         query = session.query(Book.ISBN).filter(Book.ISBN == curr_book.ISBN).all()
         if len(query):
-            print('Book already exists')
             count_duplicates += 1
         else:
             session.add(curr_book)
             session.commit()
             count_success += 1
 
-    print('Books inserted')
+    # print('Books inserted')
     return [count_errors, count_duplicates, count_success]
 
 
