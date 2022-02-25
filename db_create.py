@@ -1,4 +1,5 @@
 import logging
+from os import path
 
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
@@ -8,9 +9,10 @@ from db_login.login_data_manage import init_login_info, get_admin as admin_setti
 
 
 def db_create():
-    if not init_login_info():
-        # print("Error with login initialization")
-        quit()
+    if not path.isfile('db_login/key.key'):
+        if not init_login_info():
+            # print("Error with login initialization")
+            quit()
     admin_login_data = admin_settings()
     u = admin_login_data['user']
     pd = admin_login_data['passwd']

@@ -38,29 +38,23 @@ def import_login_data(file, key_file):
     return login_data
 
 
-def init_login_info():
+def init_login_info(admin_file="db_login/admin", user_file="db_login/user", key_file="db_login/key.key",
+                    user_login=user_login_data, admin_login=admin_login_data):
     try:
-        admin_file = "admin"
-        user_file = "user"
-        key_file = "key.key"
         write_key(key_file)
-        export_login_data(user_login_data, user_file, key_file)
-        export_login_data(admin_login_data, admin_file, key_file)
+        export_login_data(user_login, user_file, key_file)
+        export_login_data(admin_login, admin_file, key_file)
         return True
     except Exception as e:
         print(e)
         return False
 
 
-def get_user():
-    user_file = "user"
-    key_file = "key.key"
+def get_user(user_file="db_login/user", key_file="db_login/key.key"):
     user_data = import_login_data(user_file, key_file)
     return user_data
 
 
-def get_admin():
-    admin_file = "admin"
-    key_file = "key.key"
+def get_admin(admin_file="db_login/admin", key_file="db_login/key.key"):
     admin_data = import_login_data(admin_file, key_file)
     return admin_data

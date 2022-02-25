@@ -1,10 +1,11 @@
 import logging
+from os import path
 
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-from db_login.login_data_manage import get_user as user_settings
+from db_login.login_data_manage import init_login_info, get_user as user_settings
 
 log = logging.getLogger(__name__)
 
@@ -17,13 +18,16 @@ def get_database():
     except IOError:
         log.exception("Failed connection")
         return None, 'fail'
-
     return engine
 
 
 def get_engine_from_settings():
     # set db connection based on user_settings
     keys = ['user', 'passwd', 'host', 'port', 'db']
+    if not path.isfile('db_login/key.key'):
+        if not init_login_info():
+            # print("Error with login initialization")
+            quit()
     user_login_data = user_settings()
     if not all(key in keys for key in user_login_data.keys()):
         raise Exception('Bad config file')
