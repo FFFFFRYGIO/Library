@@ -27,4 +27,4 @@ def get_api_request(book_params):
     if response_dict['totalItems']:
         return response_dict
     else:
-        return 0
+        return -1

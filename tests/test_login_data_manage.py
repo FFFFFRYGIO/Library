@@ -43,7 +43,7 @@ def test_create_data():
     program.export_login_data(TEST_USER_DATA.copy(), USER_FILE, KEY_FILE)
     program.export_login_data(TEST_ADMIN_DATA.copy(), ADMIN_FILE, KEY_FILE)
 
-    # if methods to create data creates files
+    # if functions to create data creates files
     assert path.isfile(KEY_FILE)
     assert path.isfile(USER_FILE)
     assert path.isfile(ADMIN_FILE)

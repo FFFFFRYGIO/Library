@@ -12,7 +12,7 @@ def add_books(book_params):
         flash('No parameters to add books')
         return [-1, -1, -1]
     response_dict = get_api_request(book_params)
-    if not response_dict:
+    if response_dict == -1:
         return [-1, -1, -1]
     count_errors = 0
     count_duplicates = 0
