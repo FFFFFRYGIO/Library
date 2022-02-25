@@ -25,14 +25,17 @@
         </ul>
     </div>
 </nav>
+
 <div class="container-fluid">
-    {% for message in get_flashed_messages() %}
-        <div class="alert alert-warning alert-dismissible" role="alert">
+    {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+            <div class="alert alert-warning alert-dismissible" role="alert">
             <span type="button" class="close" data-dismiss="alert" aria-label="Close"><span
                     aria-hidden="true">&times;</span></span>
-            {{ message }}
-        </div>
-    {% endfor %}
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endwith %}
 </div>
 <div class="container-fluid">
     {% block content %}

@@ -69,7 +69,7 @@ def add_books(book_params):
         try:
             curr_book.language = vol.get('language', '<no language>')
         except TypeError:
-            curr_book.language = '<no language>'
+            curr_book.language = '<no lan.>'
 
         query = session.query(Book.ISBN).filter(Book.ISBN == curr_book.ISBN).all()
         if len(query):
@@ -85,26 +85,25 @@ def add_books(book_params):
 
 def edit_book(book_target_isbn, book_config):
     wrong_inputs = []
+    statements = []
 
     if 'pageCount' in book_config:
         pagecount_source = session.query(Book.pageCount).filter(Book.ISBN == book_target_isbn).first()[0]
         if not len(book_config['pageCount']):
             if pagecount_source:
-                stmt = update(Book).where(Book.ISBN == book_target_isbn
-                                          ).values(pageCount=None
-                                                   ).execution_options(synchronize_session="fetch")
-                session.execute(stmt)
-                session.commit()
+                statements.append(update(Book).where(Book.ISBN == book_target_isbn
+                                                     ).values(pageCount=None
+                                                              ).execution_options(synchronize_session="fetch")
+                                  )
             else:
                 book_config.pop('pageCount')
         elif pagecount_source == int(book_config['pageCount']):
             book_config.pop('pageCount')
         else:
-            stmt = update(Book).where(Book.ISBN == book_target_isbn
-                                      ).values(pageCount=book_config['pageCount']
-                                               ).execution_options(synchronize_session="fetch")
-            session.execute(stmt)
-            session.commit()
+            statements.append(update(Book).where(Book.ISBN == book_target_isbn
+                                                 ).values(pageCount=book_config['pageCount']
+                                                          ).execution_options(synchronize_session="fetch")
+                              )
 
     if not len(book_config):
         flash('No changes found')
@@ -114,13 +113,13 @@ def edit_book(book_target_isbn, book_config):
         if len(book_config['title']) > 270:
             wrong_inputs.append('Title too long')
         elif len(book_config['title']) == 0:
-            wrong_inputs.append('Empty title')
+            flash('Empty title')
+            return False
         else:
-            stmt = update(Book).where(Book.ISBN == book_target_isbn
-                                      ).values(title=book_config['title']
-                                               ).execution_options(synchronize_session="fetch")
-            session.execute(stmt)
-            session.commit()
+            statements.append(update(Book).where(Book.ISBN == book_target_isbn
+                                                 ).values(title=book_config['title']
+                                                          ).execution_options(synchronize_session="fetch")
+                              )
 
     if 'authors' in book_config:
         if len(book_config['authors']) > 100:
@@ -128,23 +127,23 @@ def edit_book(book_target_isbn, book_config):
         else:
             if len(book_config['authors']) == 0:
                 book_config['authors'] = '<no authors>'
-            stmt = update(Book).where(Book.ISBN == book_target_isbn
-                                      ).values(authors=book_config['authors']
-                                               ).execution_options(synchronize_session="fetch")
-            session.execute(stmt)
-            session.commit()
+            statements.append(update(Book).where(Book.ISBN == book_target_isbn
+                                                 ).values(authors=book_config['authors']
+                                                          ).execution_options(synchronize_session="fetch")
+                              )
 
     if 'publishedDate' in book_config:
+        publisheddate_source = session.query(Book.publishedDate).filter(Book.ISBN == book_target_isbn).first()[0]
         if len(book_config['publishedDate']) > 10:
             wrong_inputs.append('Published date too long')
         else:
-            if len(book_config['publishedDate']) == 0:
+            if len(book_config['publishedDate']) == 0 or book_config['publishedDate'] == 'None':
                 book_config['publishedDate'] = None
-            stmt = update(Book).where(Book.ISBN == book_target_isbn
-                                      ).values(publishedDate=book_config['publishedDate']
-                                               ).execution_options(synchronize_session="fetch")
-            session.execute(stmt)
-            session.commit()
+            if not (publisheddate_source is None and book_config['publishedDate'] is None):
+                statements.append(update(Book).where(Book.ISBN == book_target_isbn
+                                                     ).values(publishedDate=book_config['publishedDate']
+                                                              ).execution_options(synchronize_session="fetch")
+                                  )
 
     if 'thumbnail' in book_config:
         if len(book_config['thumbnail']) > 200:
@@ -152,31 +151,36 @@ def edit_book(book_target_isbn, book_config):
         else:
             if len(book_config['thumbnail']) == 0:
                 book_config['thumbnail'] = '<no thumbnail>'
-            stmt = update(Book).where(Book.ISBN == book_target_isbn
-                                      ).values(thumbnail=book_config['thumbnail']
-                                               ).execution_options(synchronize_session="fetch")
-            session.execute(stmt)
-            session.commit()
+            statements.append(update(Book).where(Book.ISBN == book_target_isbn
+                                                 ).values(thumbnail=book_config['thumbnail']
+                                                          ).execution_options(synchronize_session="fetch")
+                              )
 
     if 'language' in book_config:
         if len(book_config['language']) > 10:
             wrong_inputs.append('Language abbreviation too long')
         else:
             if len(book_config['language']) == 0:
-                book_config['language'] = '<no language>'
-            stmt = update(Book).where(Book.ISBN == book_target_isbn
-                                      ).values(language=book_config['language']
-                                               ).execution_options(synchronize_session="fetch")
-            session.execute(stmt)
-            session.commit()
+                book_config['language'] = '<no lang.>'
+            statements.append(update(Book).where(Book.ISBN == book_target_isbn
+                                                 ).values(language=book_config['language']
+                                                          ).execution_options(synchronize_session="fetch")
+                              )
 
     if len(wrong_inputs):
         flash("Couldn't modify book with ISBN " + book_target_isbn)
         for mistake in wrong_inputs:
             flash(mistake)
         return False
-
-    return True
+    else:
+        if len(statements):
+            for stmt in statements:
+                session.execute(stmt)
+                session.commit()
+            return True
+        else:
+            flash('No changes found')
+            return False
 
 
 def get_books():
