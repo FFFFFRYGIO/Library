@@ -1,7 +1,5 @@
 from os import path, remove
 
-import pytest
-
 import db_login.login_data_manage as program
 
 KEY_FILE = 'tests/test_key.key'
@@ -23,7 +21,6 @@ TEST_ADMIN_DATA = {
     }
 
 
-@pytest.mark.pickling
 def test_init_login_info():
     program.init_login_info(key_file=KEY_FILE, user_file=USER_FILE, admin_file=ADMIN_FILE)
 
@@ -37,7 +34,6 @@ def test_init_login_info():
     remove(ADMIN_FILE)
 
 
-@pytest.mark.pickling
 def test_create_data():
     program.write_key(KEY_FILE)
     program.export_login_data(TEST_USER_DATA.copy(), USER_FILE, KEY_FILE)
@@ -57,7 +53,6 @@ def test_create_data():
     remove(ADMIN_FILE)
 
 
-@pytest.mark.pickling
 def test_passwords():
     program.init_login_info(key_file=KEY_FILE, user_file=USER_FILE, admin_file=ADMIN_FILE,
                             user_login=TEST_USER_DATA.copy(), admin_login=TEST_ADMIN_DATA.copy())
