@@ -1,7 +1,7 @@
 create_admin:
 	python instructions/create_admin.py
 
-build: instructions/requirements.txt
+build: requirements.txt
 	py -3 -m venv venv
 	venv\Scripts\activate
 	pip install -r instructions/requirements.txt
