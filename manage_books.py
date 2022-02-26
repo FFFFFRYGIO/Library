@@ -1,5 +1,5 @@
 from flask import flash
-from sqlalchemy import update
+from sqlalchemy import update, delete
 
 from api_request import get_api_request
 from db_connect import session
@@ -181,6 +181,13 @@ def edit_book(book_target_isbn, book_config):
         else:
             flash('No changes found')
             return False
+
+
+def delete_book(book_isbn):
+    del_book = (delete(Book).where(Book.ISBN == book_isbn))
+    session.execute(del_book)
+    session.commit()
+    return True
 
 
 def get_books():

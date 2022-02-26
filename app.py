@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 
-from manage_books import get_books, add_books as add, edit_book as edit, get_book_by_isbn
+from manage_books import get_books, add_books as add, edit_book as edit, get_book_by_isbn, delete_book
 
 app = Flask(__name__)
 app.secret_key = '12345'
@@ -39,9 +39,17 @@ def home():
 def books_list():
     if 'user' in session:
         if request.method == "POST":
-            book_isbn = request.form['ISBN']
-            book_dict = get_book_by_isbn(book_isbn)
-            return redirect(url_for("edit_book", book_isbn=book_isbn, book=book_dict, user=session['user']))
+            operation = request.form['ISBN'][0]
+            book_isbn = request.form['ISBN'][1:]
+            if operation == 'E':  # edit
+                book_dict = get_book_by_isbn(book_isbn)
+                return redirect(url_for("edit_book", book_isbn=book_isbn, book=book_dict, user=session['user']))
+            elif operation == 'D':  # delete
+                if delete_book(book_isbn):
+                    flash('Success with deleting book')
+                else:
+                    flash('Error with deleting book')
+                return render_template("books_list.html", books=get_books(), user=session['user'])
         else:
             return render_template("books_list.html", books=get_books(), user=session['user'])
     else:

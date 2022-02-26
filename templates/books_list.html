@@ -12,6 +12,7 @@
                     <th scope="col">{{ attr }}</th>
                 {% endfor %}
                 <th>Edit</th>
+                <th>Delete</th>
             </tr>
             </thead>
             <tbody>
@@ -43,7 +44,12 @@
                     <td>{{ book['language'] }}</td>
                     <td>
                         <form action="#" method="post">
-                            <button type="submit" value={{ book['ISBN'] }} name="ISBN">edit</button><br>
+                            <button type="submit" value="E{{ book['ISBN'] }}" name="ISBN">edit</button><br>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="#" method="post">
+                            <button type="submit" value="D{{ book['ISBN'] }}" name="ISBN">Delete</button><br>
                         </form>
                     </td>
                     </tr>
