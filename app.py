@@ -6,7 +6,7 @@ from manage_books import get_books, add_books as add, edit_book as edit, get_boo
 
 app = Flask(__name__)
 app.secret_key = '12345'
-app.permanent_session_lifetime = timedelta(minutes=5)
+app.permanent_session_lifetime = timedelta(minutes=10)
 
 
 @app.route('/', methods=["POST", "GET"])
