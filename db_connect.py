@@ -31,6 +31,7 @@ def get_engine_from_settings():
     user_login_data = user_settings()
     if not all(key in keys for key in user_login_data.keys()):
         raise Exception('Bad config file')
+
     return get_engine(
         user_login_data['user'],
         user_login_data['passwd'],
