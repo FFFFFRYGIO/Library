@@ -1,0 +1,12 @@
+pickle-mixin
+cryptography
+inspect
+requests
+datetime
+flask
+logging
+sqlalchemy
+SQLAlchemy-Utils
+Jinja2
+psycopg2
+pytest

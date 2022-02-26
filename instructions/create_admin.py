@@ -1,0 +1,7 @@
+print()
+print("Create user that will be admin for database of app with following command:")
+print("CREATE USER library_admin WITH PASSWORD '123';")
+print()
+print("In next step give this user premmision to create database:")
+print("ALTER USER library_admin CREATEDB;")
+print()
